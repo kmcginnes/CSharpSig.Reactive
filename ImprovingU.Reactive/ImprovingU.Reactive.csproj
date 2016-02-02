@@ -119,6 +119,7 @@
     <Compile Include="Infrastructure\ModalController.cs" />
     <Compile Include="Infrastructure\NullLog.cs" />
     <Compile Include="Infrastructure\ReactiveModal.cs" />
+    <Compile Include="Infrastructure\ReactiveUiExtensions.cs" />
     <Compile Include="Infrastructure\ReactiveViewModel.cs" />
     <Compile Include="Infrastructure\UIElementExtensions.cs" />
     <Compile Include="MainWindow.xaml.cs">
