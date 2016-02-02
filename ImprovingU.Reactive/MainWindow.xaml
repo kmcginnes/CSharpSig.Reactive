@@ -1,0 +1,22 @@
+﻿<Window x:Class="ImprovingU.Reactive.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:reactiveUi="clr-namespace:ReactiveUI;assembly=ReactiveUI"
+        xmlns:reactive="clr-namespace:ImprovingU.Reactive"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="600" Width="525">
+    <Grid Background="{StaticResource DarkBackgroundBrush}">
+        <Border Background="White" CornerRadius="5"  Padding="30,40"
+                Effect="{StaticResource ModalShadow}"
+                HorizontalAlignment="Center" VerticalAlignment="Center">
+            <reactiveUi:ViewModelViewHost x:Name="CreateUserContainer">
+                <reactive:CreateUserView />
+            </reactiveUi:ViewModelViewHost>
+        </Border>
+    </Grid>
+</Window>
+
+
+

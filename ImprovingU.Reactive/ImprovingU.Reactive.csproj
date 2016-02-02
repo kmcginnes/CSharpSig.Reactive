@@ -7,8 +7,8 @@
     <ProjectGuid>{83EF94ED-0EA6-486F-80C0-A148F175F681}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ImprovingU.ReactiveUI</RootNamespace>
-    <AssemblyName>ImprovingU.ReactiveUI</AssemblyName>
+    <RootNamespace>ImprovingU.Reactive</RootNamespace>
+    <AssemblyName>ImprovingU.Reactive</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -91,6 +91,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="CreateUserView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -99,6 +103,24 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CreateUserView.xaml.cs">
+      <DependentUpon>CreateUserView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CreateUserViewModel.cs" />
+    <Compile Include="Infrastructure\AppBootstrapper.cs" />
+    <Compile Include="Infrastructure\ConsoleLog.cs" />
+    <Compile Include="Infrastructure\Extensions.cs" />
+    <Compile Include="Infrastructure\ILog.cs" />
+    <Compile Include="Infrastructure\ImageProvider.cs" />
+    <Compile Include="Infrastructure\Log.cs" />
+    <Compile Include="Infrastructure\LogExtensions.cs" />
+    <Compile Include="Infrastructure\ModalContentCommands.cs" />
+    <Compile Include="Infrastructure\ModalContentPresenter.cs" />
+    <Compile Include="Infrastructure\ModalController.cs" />
+    <Compile Include="Infrastructure\NullLog.cs" />
+    <Compile Include="Infrastructure\ReactiveModal.cs" />
+    <Compile Include="Infrastructure\ReactiveViewModel.cs" />
+    <Compile Include="Infrastructure\UIElementExtensions.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -130,7 +152,9 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
