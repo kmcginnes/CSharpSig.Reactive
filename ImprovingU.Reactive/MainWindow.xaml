@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="600" Width="525">
     <Grid Background="{StaticResource DarkBackgroundBrush}">
-        <Border Background="White" CornerRadius="5"  Padding="30,40"
+        <Border Background="White" CornerRadius="5"  Padding="15"
                 Effect="{StaticResource ModalShadow}"
                 HorizontalAlignment="Center" VerticalAlignment="Center">
             <reactiveUi:ViewModelViewHost x:Name="CreateUserContainer">

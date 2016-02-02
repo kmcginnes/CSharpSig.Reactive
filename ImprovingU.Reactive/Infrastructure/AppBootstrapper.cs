@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Reactive.Linq;
 using System.Reflection;
 using System.Security.Principal;
 using System.Threading;
@@ -24,10 +25,10 @@ namespace ImprovingU.Reactive.Infrastructure
             RegisterTypesInContainer(dependencyResolver);
         }
 
-        private void InitializeLogging()
+        void InitializeLogging()
         {
             // Set the main thread's name to make it clear in the logs.
-            Thread.CurrentThread.Name = "Main";
+            Thread.CurrentThread.Name = "UI";
 
             // Sets my logger to the console, which goes to the debug output.
             Log.InitializeWith<ConsoleLog>();
@@ -61,7 +62,7 @@ namespace ImprovingU.Reactive.Infrastructure
             LogExtensions.Log(this).Info("  Windows Version: {0}", windowsVersion);
         }
 
-        private static string GetAssemblyDirectory()
+        static string GetAssemblyDirectory()
         {
             var codeBase = Assembly.GetExecutingAssembly().CodeBase;
             var uri = new UriBuilder(codeBase);
@@ -69,7 +70,7 @@ namespace ImprovingU.Reactive.Infrastructure
             return Path.GetDirectoryName(path);
         }
 
-        private void RegisterExceptionHandlers()
+        void RegisterExceptionHandlers()
         {
             // If we are running this app in Visual Studio then do not handle
             // any of the unhandled exceptions. Let Visual Studio catch them.
@@ -98,7 +99,7 @@ namespace ImprovingU.Reactive.Infrastructure
             };
         }
 
-        private void RegisterTypesInContainer(IMutableDependencyResolver dependencyResolver)
+        void RegisterTypesInContainer(IMutableDependencyResolver dependencyResolver)
         {
             dependencyResolver.RegisterConstant(this, typeof(IScreen));
 
