@@ -7,8 +7,9 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows.Controls.Primitives;
 using ImprovingU.Reactive.UI;
+using ReactiveUI;
 
-namespace ReactiveUI
+namespace ImprovingU.Reactive
 {
     public static class ReactiveUiExtensions
     {

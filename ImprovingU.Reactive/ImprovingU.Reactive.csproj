@@ -35,6 +35,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FontAwesome.WPF, Version=4.5.0.32401, Culture=neutral, PublicKeyToken=0758b07a11a4f466, processorArchitecture=MSIL">
+      <HintPath>..\packages\FontAwesome.WPF.4.5.0.7\lib\net40\FontAwesome.WPF.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="ReactiveUI, Version=6.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\reactiveui-core.6.5.0\lib\Net45\ReactiveUI.dll</HintPath>
       <Private>True</Private>
@@ -91,12 +95,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Infrastructure\ObservableExtensions.cs" />
     <Compile Include="Infrastructure\StringExtensions.cs" />
     <Compile Include="Infrastructure\Validation\ReactivePropertyValidationResult.cs" />
     <Compile Include="Infrastructure\Validation\ReactivePropertyValidator.cs" />
     <Compile Include="Infrastructure\Validation\ReactivePropertyValidatorExtensions.cs" />
     <Compile Include="Infrastructure\Validation\ValidationStatus.cs" />
+    <Compile Include="UI\BooleanToVisibilityConverter.cs" />
     <Compile Include="UI\SecurePasswordBox.cs" />
+    <Compile Include="UI\ValidationMessage.cs" />
+    <Compile Include="UI\ValueConverterMarkupExtension.cs" />
     <Page Include="CreateUserView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

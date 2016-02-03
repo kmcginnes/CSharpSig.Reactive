@@ -35,6 +35,9 @@
         
             <TextBlock Text="Confirm Password:"/>
             <ui:SecurePasswordBox x:Name="ConfirmPassword"/>
+            
+            <ui:ValidationMessage x:Name="PasswordValidationMessage" ValidatesControl="{Binding ElementName=Password}"/>
+            <ui:ValidationMessage x:Name="ConfirmPasswordValidationMessage" ValidatesControl="{Binding ElementName=ConfirmPassword}"/>
         </st:AutoGrid>
         
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">

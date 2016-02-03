@@ -5,6 +5,8 @@
              xmlns:reactiveUi="clr-namespace:ReactiveUI;assembly=ReactiveUI"
              xmlns:ui="clr-namespace:ImprovingU.Reactive.UI"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
+             xmlns:st="http://schemas.spicytaco.io/"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         
@@ -17,11 +19,28 @@
         <FontFamily x:Key="FontFamily">Arial</FontFamily>
         <sys:Double x:Key="DefaultFontSize">14</sys:Double>
         <SolidColorBrush x:Key="MutedForeground" Color="SlateGray"/>
+        <SolidColorBrush x:Key="ErrorForeground" Color="#FFE74C3C"/>
         
         <Thickness x:Key="Spacing">5</Thickness>
         <Thickness x:Key="SpacingTight">2.5</Thickness>
         <Thickness x:Key="SpacingTightVertically">5,2.5</Thickness>
         <Thickness x:Key="SpacingTightHorizontally">2.5,5</Thickness>
+
+        <!-- Validation error styles -->
+        <ControlTemplate x:Key="ErrorTemplate">
+            <DockPanel LastChildFill="True">
+                <Grid DockPanel.Dock="Right" Width="16" Height="16" VerticalAlignment="Center" Margin="-22 0 0 0">
+                    <fa:ImageAwesome Icon="TimesCircleOutline" Foreground="{StaticResource ErrorForeground}"
+                                     IsHitTestVisible="False" Focusable="False"/>
+                </Grid>
+                <Border BorderBrush="{StaticResource ErrorForeground}" BorderThickness="1" Margin="-1">
+                    <Grid>
+                        <Border Background="{StaticResource ErrorForeground}" IsHitTestVisible="False" Opacity="0.2"/>
+                        <AdornedElementPlaceholder Name="controlWithError"/>
+                    </Grid>
+                </Border>
+            </DockPanel>
+        </ControlTemplate>
 
         <Style TargetType="Window">
             <Setter Property="TextOptions.TextHintingMode" Value="Auto"/>
@@ -76,6 +95,12 @@
             <Setter Property="FontFamily" Value="{StaticResource FontFamily}"/>
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ErrorTemplate}"/>
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="ToolTip" Value="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
         <Style TargetType="ui:SecurePasswordBox">
@@ -84,6 +109,12 @@
             <Setter Property="FontFamily" Value="{StaticResource FontFamily}"/>
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ErrorTemplate}"/>
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="ToolTip" Value="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
         <Style TargetType="CheckBox">
@@ -98,50 +129,43 @@
             <Setter Property="VerticalAlignment" Value="Stretch"/>
             <Setter Property="VerticalContentAlignment" Value="Stretch"/>
         </Style>
-
-        <Style x:Key="IconFont" TargetType="TextBlock" BasedOn="{StaticResource TextBase}">
-            <Setter Property="FontFamily" Value="pack://application:,,,/PoC.NuGetWpf;component/#FontAwesome"/>
-            <Setter Property="Margin" Value="0"/>
+        
+        <Style TargetType="{x:Type ui:ValidationMessage}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ui:ValidationMessage}">
+                        <TextBlock Visibility="Collapsed" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
 
-        <Style x:Key="IconCloudDownload" TargetType="TextBlock" BasedOn="{StaticResource IconFont}">
-            <Setter Property="Text" Value="&#xf0ed;"/>
-        </Style>
+        <Style x:Key="InlineValidationMessage" TargetType="{x:Type ui:ValidationMessage}">
+            <Setter Property="Padding" Value="2,0,2,4" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ui:ValidationMessage}">
+                        <st:AutoGrid x:Name="grid" Columns="Auto,Auto" Rows="Auto" Visibility="Collapsed" 
+                                     Margin="{TemplateBinding Padding}" ToolTip="{TemplateBinding Text}">
+                            <fa:ImageAwesome x:Name="icon" Icon="{TemplateBinding Icon}"
+                                             Width="16" Height="16" Foreground="{TemplateBinding Fill}"
+                                             Visibility="{TemplateBinding ShowError, Converter={ui:BooleanToVisibilityConverter}}"/>
 
-        <Style x:Key="IconCalendarPlus" TargetType="TextBlock" BasedOn="{StaticResource IconFont}">
-            <Setter Property="Text" Value="&#xf271;"/>
-        </Style>
+                            <TextBlock Text="{TemplateBinding Text}" Margin="3,0,0,2" VerticalAlignment="Center"/>
+                        </st:AutoGrid>
 
-        <Style x:Key="IconArchive" TargetType="TextBlock" BasedOn="{StaticResource IconFont}">
-            <Setter Property="Text" Value="&#xf187;"/>
-        </Style>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsShowingMessage" Value="True">
+                                <Setter Property="Visibility" Value="Visible" TargetName="grid" />
+                            </Trigger>
 
-        <Style x:Key="IconTrash" TargetType="TextBlock" BasedOn="{StaticResource IconFont}">
-            <Setter Property="Text" Value="&#xf014;"/>
-        </Style>
-
-        <Style x:Key="IconArrowCircleUp" TargetType="TextBlock" BasedOn="{StaticResource IconFont}">
-            <Setter Property="Text" Value="&#xf01b;"/>
-        </Style>
-
-        <Style x:Key="IconDownload" TargetType="TextBlock" BasedOn="{StaticResource IconFont}">
-            <Setter Property="Text" Value="&#xf019;"/>
-        </Style>
-
-        <Style x:Key="IconExternalLink" TargetType="TextBlock" BasedOn="{StaticResource IconFont}">
-            <Setter Property="Text" Value="&#xf08e;"/>
-        </Style>
-
-        <Style x:Key="IconList" TargetType="TextBlock" BasedOn="{StaticResource IconFont}">
-            <Setter Property="Text" Value="&#xf03a;"/>
-        </Style>
-
-        <Style x:Key="IconBalanceScale" TargetType="TextBlock" BasedOn="{StaticResource IconFont}">
-            <Setter Property="Text" Value="&#xf24e;"/>
-        </Style>
-
-        <Style x:Key="IconCheckCircle" TargetType="TextBlock" BasedOn="{StaticResource IconFont}">
-            <Setter Property="Text" Value="&#xf05d;"/>
+                            <Trigger Property="IsShowingMessage" Value="False">
+                                <Setter Property="Visibility" Value="Collapsed" TargetName="grid" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
 
         <!-- Styles to set the design time background -->
