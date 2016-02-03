@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:st="http://schemas.spicytaco.io/"
+             xmlns:ui="clr-namespace:ImprovingU.Reactive.UI"
              mc:Ignorable="d" >
     
     <st:AutoGrid Columns="*" ChildMargin="5">
@@ -30,10 +31,10 @@
             <TextBox x:Name="Email"/>
         
             <TextBlock Text="Password:"/>
-            <TextBox x:Name="Password"/>
+            <ui:SecurePasswordBox x:Name="Password"/>
         
             <TextBlock Text="Confirm Password:"/>
-            <TextBox x:Name="ConfirmPassword"/>
+            <ui:SecurePasswordBox x:Name="ConfirmPassword"/>
         </st:AutoGrid>
         
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">

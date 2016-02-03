@@ -5,7 +5,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using ImprovingU.Reactive.UI;
 
 namespace ReactiveUI
 {
@@ -15,11 +16,11 @@ namespace ReactiveUI
             TViewModel viewModel,
             Expression<Func<TViewModel, TVMProp>> vmProperty,
             Expression<Func<TView, TVProp>> viewProperty,
-            PasswordBox passwordBox) where TViewModel : class where TView : IViewFor
+            SecurePasswordBox passwordBox) where TViewModel : class where TView : IViewFor
         {
             var oneWayBind = view.OneWayBind(viewModel, vmProperty, viewProperty);
-            var bindTo = passwordBox.Events().PasswordChanged
-                .Select(_ => passwordBox.Password)
+            var bindTo = passwordBox.Events().TextChanged
+                .Select(_ => passwordBox.Text)
                 .BindTo(viewModel, vmProperty);
             return new CompositeDisposable(oneWayBind, bindTo);
         }

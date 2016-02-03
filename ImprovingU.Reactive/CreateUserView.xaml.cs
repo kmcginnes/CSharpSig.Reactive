@@ -15,8 +15,8 @@ namespace ImprovingU.Reactive
                 d(this.Bind(ViewModel, vm => vm.FirstName, v => v.FirstName));
                 d(this.Bind(ViewModel, vm => vm.LastName, v => v.LastName));
                 d(this.Bind(ViewModel, vm => vm.Username, v => v.UserName));
-                d(this.Bind(ViewModel, vm => vm.Password, v => v.Password));
-                d(this.Bind(ViewModel, vm => vm.ConfirmPassword, v => v.ConfirmPassword));
+                d(this.BindPassword(ViewModel, vm => vm.Password, v => v.Password.Text, Password));
+                d(this.BindPassword(ViewModel, vm => vm.ConfirmPassword, v => v.ConfirmPassword.Text, ConfirmPassword));
 
                 d(this.BindCommand(ViewModel, vm => vm.Save, v => v.Save));
                 d(this.BindCommand(ViewModel, vm => vm.Cancel, v => v.Cancel));
