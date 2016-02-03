@@ -12,9 +12,9 @@ namespace ImprovingU.Reactive
 
             this.WhenActivated(d =>
             {
-                d(this.Bind(ViewModel, vm => vm.FirstName, v => v.FirstName));
-                d(this.Bind(ViewModel, vm => vm.LastName, v => v.LastName));
-                d(this.Bind(ViewModel, vm => vm.Username, v => v.UserName));
+                d(this.Bind(ViewModel, vm => vm.FirstName, v => v.FirstName.Text));
+                d(this.Bind(ViewModel, vm => vm.LastName, v => v.LastName.Text));
+                d(this.Bind(ViewModel, vm => vm.Username, v => v.UserName.Text));
 
                 d(this.BindPassword(ViewModel, vm => vm.Password, v => v.Password.Text, Password));
                 d(this.OneWayBind(ViewModel, vm => vm.PasswordValidator, v => v.PasswordValidationMessage.ReactiveValidator));
@@ -23,6 +23,8 @@ namespace ImprovingU.Reactive
 
                 d(this.BindCommand(ViewModel, vm => vm.Save, v => v.Save));
                 d(this.BindCommand(ViewModel, vm => vm.Cancel, v => v.Cancel));
+
+                d(this.OneWayBind(ViewModel, vm => vm.IsSaving, v => v.IsEnabled, value => !value));
             });
         }
 

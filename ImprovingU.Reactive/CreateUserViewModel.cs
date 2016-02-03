@@ -1,4 +1,7 @@
-﻿using ImprovingU.Reactive.Infrastructure.Validation;
+﻿using System;
+using System.Reactive;
+using System.Reactive.Linq;
+using ImprovingU.Reactive.Infrastructure.Validation;
 using ReactiveUI;
 
 namespace ImprovingU.Reactive
@@ -7,22 +10,47 @@ namespace ImprovingU.Reactive
     {
         public CreateUserViewModel()
         {
+            Username = String.Empty;
+            FirstName = String.Empty;
+            LastName = String.Empty;
+            Password = String.Empty;
+            ConfirmPassword = String.Empty;
+
             PasswordValidator = ReactivePropertyValidator.For(this, x => x.Password)
-                .IfNullOrEmpty("Must enter a password");
+                .IfNullOrEmpty("Must enter a password")
+                .IfFalse(val => val.Length > 5, "Must be at least 5 characters");
             ConfirmPasswordValidator = ReactivePropertyValidator.For(this, x => x.ConfirmPassword)
-                .IfNullOrEmpty("Must enter the same password again");
+                .IfNullOrEmpty("Must enter the same password again")
+                .IfNotMatch(Password, "Must match password");
 
             var canSave = this.WhenAny(
                 x => x.PasswordValidator.ValidationResult.IsValid,
                 x => x.ConfirmPasswordValidator.ValidationResult.IsValid,
                 (pass, conf) => pass.Value && conf.Value);
 
-            Save = ReactiveCommand.Create(canSave);
-            Cancel = ReactiveCommand.Create();
+            Save = ReactiveCommand.CreateAsyncObservable(canSave, SaveUser);
+            Save.IsExecuting.ToProperty(this, x => x.IsSaving, out _isSaving);
+
+            Cancel = ReactiveCommand.CreateAsyncTask(async _ =>
+            {
+                Username = String.Empty;
+                FirstName = String.Empty;
+                LastName = String.Empty;
+                Password = String.Empty;
+                ConfirmPassword = String.Empty;
+                await PasswordValidator.ResetAsync();
+                await ConfirmPasswordValidator.ResetAsync();
+            });
         }
 
-        public ReactiveCommand<object> Save { get; }
-        public ReactiveCommand<object> Cancel { get; }
+        IObservable<Unit> SaveUser(object _)
+        {
+            // Fake some async work
+            return Observable.Defer(() => Observable.Timer(TimeSpan.FromMilliseconds(3000)).ToUnit());
+        }
+
+        public ReactiveCommand<Unit> Save { get; }
+        public ReactiveCommand<Unit> Cancel { get; }
 
         string _firstName;
         public string FirstName
@@ -62,5 +90,8 @@ namespace ImprovingU.Reactive
         }
 
         public ReactivePropertyValidator<string> ConfirmPasswordValidator { get; }
+
+        readonly ObservableAsPropertyHelper<bool> _isSaving;
+        public bool IsSaving => _isSaving.Value;
     }
 }
