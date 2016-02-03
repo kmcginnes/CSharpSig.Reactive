@@ -18,9 +18,6 @@
                 </Style>
             </st:AutoGrid.Resources>
         
-            <TextBlock Text="User name:"/>
-            <TextBox x:Name="UserName"/>
-        
             <TextBlock Text="First name:"/>
             <TextBox x:Name="FirstName"/>
         
@@ -36,8 +33,9 @@
             <TextBlock Text="Confirm Password:"/>
             <ui:SecurePasswordBox x:Name="ConfirmPassword"/>
             
-            <ui:ValidationMessage x:Name="PasswordValidationMessage" ValidatesControl="{Binding ElementName=Password}"/>
-            <ui:ValidationMessage x:Name="ConfirmPasswordValidationMessage" ValidatesControl="{Binding ElementName=ConfirmPassword}"/>
+            <ui:ValidationMessage x:Name="EmailValidation" ValidatesControl="{Binding ElementName=Email}"/>
+            <ui:ValidationMessage x:Name="PasswordValidation" ValidatesControl="{Binding ElementName=Password}"/>
+            <ui:ValidationMessage x:Name="ConfirmPasswordValidation" ValidatesControl="{Binding ElementName=ConfirmPassword}"/>
         </st:AutoGrid>
         
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">

@@ -10,12 +10,15 @@ namespace ImprovingU.Reactive
     {
         public CreateUserViewModel()
         {
-            Username = String.Empty;
+            Email = String.Empty;
             FirstName = String.Empty;
             LastName = String.Empty;
             Password = String.Empty;
             ConfirmPassword = String.Empty;
 
+            EmailValidator = ReactivePropertyValidator.For(this, x => x.Email)
+                .IfNullOrEmpty("Must enter an email")
+                .IfNotEmail("Must be a valid email");
             PasswordValidator = ReactivePropertyValidator.For(this, x => x.Password)
                 .IfNullOrEmpty("Must enter a password")
                 .IfFalse(val => val.Length > 5, "Must be at least 5 characters");
@@ -24,20 +27,22 @@ namespace ImprovingU.Reactive
                 .IfNotMatch(Password, "Must match password");
 
             var canSave = this.WhenAny(
+                x => x.EmailValidator.ValidationResult.IsValid,
                 x => x.PasswordValidator.ValidationResult.IsValid,
                 x => x.ConfirmPasswordValidator.ValidationResult.IsValid,
-                (pass, conf) => pass.Value && conf.Value);
+                (email, pass, conf) => email.Value && pass.Value && conf.Value);
 
             Save = ReactiveCommand.CreateAsyncObservable(canSave, SaveUser);
             Save.IsExecuting.ToProperty(this, x => x.IsSaving, out _isSaving);
 
             Cancel = ReactiveCommand.CreateAsyncTask(async _ =>
             {
-                Username = String.Empty;
+                Email = String.Empty;
                 FirstName = String.Empty;
                 LastName = String.Empty;
                 Password = String.Empty;
                 ConfirmPassword = String.Empty;
+                await EmailValidator.ResetAsync();
                 await PasswordValidator.ResetAsync();
                 await ConfirmPasswordValidator.ResetAsync();
             });
@@ -66,12 +71,14 @@ namespace ImprovingU.Reactive
             set { this.RaiseAndSetIfChanged(ref _lastName, value); }
         }
 
-        string _username;
-        public string Username
+        string _email;
+        public string Email
         {
-            get { return _username; }
-            set { this.RaiseAndSetIfChanged(ref _username, value); }
+            get { return _email; }
+            set { this.RaiseAndSetIfChanged(ref _email, value); }
         }
+
+        public ReactivePropertyValidator<string> EmailValidator { get; }
 
         string _password;
         public string Password

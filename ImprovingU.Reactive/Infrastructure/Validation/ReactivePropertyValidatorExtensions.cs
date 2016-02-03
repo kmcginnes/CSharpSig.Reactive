@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Net.Mail;
 using System.Text.RegularExpressions;
 
 namespace ImprovingU.Reactive.Infrastructure.Validation
@@ -34,13 +35,30 @@ namespace ImprovingU.Reactive.Infrastructure.Validation
                 return Uri.TryCreate(s, UriKind.Absolute, out uri);
             }, errorMessage);
         }
+
+        public static ReactivePropertyValidator<string> IfNotEmail(this ReactivePropertyValidator<string> This, string errorMessage)
+        {
+            return This.IfFalse(s =>
+            {
+                try
+                {
+                    var m = new MailAddress(s);
+
+                    return true;
+                }
+                catch (FormatException)
+                {
+                    return false;
+                }
+            }, errorMessage);
+        }
         
         public static ReactivePropertyValidator<string> IfContainsInvalidPathChars(this ReactivePropertyValidator<string> This, string errorMessage)
         {
             return This.IfTrue(str =>
             {
                 // easiest check to make
-                if (StringExtensions.ContainsAny(str, Path.GetInvalidPathChars()))
+                if (str.ContainsAny(Path.GetInvalidPathChars()))
                 {
                     return true;
                 }
@@ -78,7 +96,7 @@ namespace ImprovingU.Reactive.Infrastructure.Validation
                 // lastly, check each directory name doesn't contain
                 // any invalid filename characters
                 var foldersInPath = str.Substring(driveLetter.Length);
-                return Enumerable.Any<string>(foldersInPath.Split(new[] { '\\', '/' }, StringSplitOptions.None), x => StringExtensions.ContainsAny(x, Path.GetInvalidFileNameChars()));
+                return foldersInPath.Split(new[] { '\\', '/' }, StringSplitOptions.None).Any<string>(x => x.ContainsAny(Path.GetInvalidFileNameChars()));
             }, errorMessage);
         }
 

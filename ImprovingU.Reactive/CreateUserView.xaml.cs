@@ -14,12 +14,15 @@ namespace ImprovingU.Reactive
             {
                 d(this.Bind(ViewModel, vm => vm.FirstName, v => v.FirstName.Text));
                 d(this.Bind(ViewModel, vm => vm.LastName, v => v.LastName.Text));
-                d(this.Bind(ViewModel, vm => vm.Username, v => v.UserName.Text));
+
+                d(this.Bind(ViewModel, vm => vm.Email, v => v.Email.Text));
+                d(this.OneWayBind(ViewModel, vm => vm.EmailValidator, v => v.EmailValidation.ReactiveValidator));
 
                 d(this.BindPassword(ViewModel, vm => vm.Password, v => v.Password.Text, Password));
-                d(this.OneWayBind(ViewModel, vm => vm.PasswordValidator, v => v.PasswordValidationMessage.ReactiveValidator));
+                d(this.OneWayBind(ViewModel, vm => vm.PasswordValidator, v => v.PasswordValidation.ReactiveValidator));
+
                 d(this.BindPassword(ViewModel, vm => vm.ConfirmPassword, v => v.ConfirmPassword.Text, ConfirmPassword));
-                d(this.OneWayBind(ViewModel, vm => vm.ConfirmPasswordValidator, v => v.ConfirmPasswordValidationMessage.ReactiveValidator));
+                d(this.OneWayBind(ViewModel, vm => vm.ConfirmPasswordValidator, v => v.ConfirmPasswordValidation.ReactiveValidator));
 
                 d(this.BindCommand(ViewModel, vm => vm.Save, v => v.Save));
                 d(this.BindCommand(ViewModel, vm => vm.Cancel, v => v.Cancel));
