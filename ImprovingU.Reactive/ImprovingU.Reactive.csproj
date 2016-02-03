@@ -91,6 +91,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Infrastructure\StringExtensions.cs" />
+    <Compile Include="Infrastructure\Validation\ReactivePropertyValidationResult.cs" />
+    <Compile Include="Infrastructure\Validation\ReactivePropertyValidator.cs" />
+    <Compile Include="Infrastructure\Validation\ReactivePropertyValidatorExtensions.cs" />
+    <Compile Include="Infrastructure\Validation\ValidationStatus.cs" />
     <Compile Include="UI\SecurePasswordBox.cs" />
     <Page Include="CreateUserView.xaml">
       <SubType>Designer</SubType>
@@ -158,6 +163,7 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
