@@ -1,4 +1,5 @@
-﻿using ReactiveUI;
+﻿using ImprovingU.Reactive.Infrastructure.Validation;
+using ReactiveUI;
 
 namespace ImprovingU.Reactive
 {
@@ -6,7 +7,17 @@ namespace ImprovingU.Reactive
     {
         public CreateUserViewModel()
         {
-            Save = ReactiveCommand.Create();
+            PasswordValidator = ReactivePropertyValidator.For(this, x => x.Password)
+                .IfNullOrEmpty("Must enter a password");
+            ConfirmPasswordValidator = ReactivePropertyValidator.For(this, x => x.ConfirmPassword)
+                .IfNullOrEmpty("Must enter the same password again");
+
+            var canSave = this.WhenAny(
+                x => x.PasswordValidator.ValidationResult.IsValid,
+                x => x.ConfirmPasswordValidator.ValidationResult.IsValid,
+                (pass, conf) => pass.Value && conf.Value);
+
+            Save = ReactiveCommand.Create(canSave);
             Cancel = ReactiveCommand.Create();
         }
 
@@ -41,11 +52,15 @@ namespace ImprovingU.Reactive
             set { this.RaiseAndSetIfChanged(ref _password, value); }
         }
 
+        public ReactivePropertyValidator<string> PasswordValidator { get; }
+
         string _confirmPassword;
         public string ConfirmPassword
         {
             get { return _confirmPassword; }
             set { this.RaiseAndSetIfChanged(ref _confirmPassword, value); }
         }
+
+        public ReactivePropertyValidator<string> ConfirmPasswordValidator { get; }
     }
 }
