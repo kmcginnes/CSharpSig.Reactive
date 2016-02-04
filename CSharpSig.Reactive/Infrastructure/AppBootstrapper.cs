@@ -33,15 +33,15 @@ namespace ImprovingU.Reactive.Infrastructure
 
             // Sets my logger to the console, which goes to the debug output.
             Locator.CurrentMutable.Register(() => new ConsoleLogger {Level = LogLevel.Debug}, typeof(ILogger));
-            
+
             // Show a banner to easily pick out where new instances start
             // in the log file. Plus it just looks cool.
-            this.Log().Info(@" _______       _______             ");
-            this.Log().Info(@"(_______)     (_______)        _   ");
-            this.Log().Info(@" _     _ _   _ _   ___ _____ _| |_ ");
-            this.Log().Info(@"| |   | | | | | | (_  | ___ (_   _)");
-            this.Log().Info(@"| |   | | |_| | |___) | ____| | |_ ");
-            this.Log().Info(@"|_|   |_|____/ \_____/|_____)  \__)");
+            this.Log().Info(@"__________                      __  .__              ");
+            this.Log().Info(@"\______   \ ____ _____    _____/  |_|__|__  __ ____  ");
+            this.Log().Info(@" |       _// __ \\__  \ _/ ___\   __\  \  \/ // __ \ ");
+            this.Log().Info(@" |    |   \  ___/ / __ \\  \___|  | |  |\   /\  ___/ ");
+            this.Log().Info(@" |____|_  /\___  >____  /\___  >__| |__| \_/  \___  >");
+            this.Log().Info(@"        \/     \/     \/     \/                   \/ ");
             this.Log().Info(@"");
 
             // Show some basic information about the assembly.
