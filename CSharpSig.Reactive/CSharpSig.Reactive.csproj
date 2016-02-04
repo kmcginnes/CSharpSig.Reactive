@@ -95,6 +95,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Infrastructure\ConsoleLogger.cs" />
     <Compile Include="Infrastructure\ObservableExtensions.cs" />
     <Compile Include="Infrastructure\StringExtensions.cs" />
     <Compile Include="Infrastructure\Validation\ReactivePropertyValidationResult.cs" />
@@ -122,16 +123,11 @@
     </Compile>
     <Compile Include="CreateUserViewModel.cs" />
     <Compile Include="Infrastructure\AppBootstrapper.cs" />
-    <Compile Include="Infrastructure\ConsoleLog.cs" />
     <Compile Include="Infrastructure\Extensions.cs" />
-    <Compile Include="Infrastructure\ILog.cs" />
     <Compile Include="Infrastructure\ImageProvider.cs" />
-    <Compile Include="Infrastructure\Log.cs" />
-    <Compile Include="Infrastructure\LogExtensions.cs" />
     <Compile Include="Infrastructure\ModalContentCommands.cs" />
     <Compile Include="Infrastructure\ModalContentPresenter.cs" />
     <Compile Include="Infrastructure\ModalController.cs" />
-    <Compile Include="Infrastructure\NullLog.cs" />
     <Compile Include="Infrastructure\ReactiveModal.cs" />
     <Compile Include="Infrastructure\ReactiveUiExtensions.cs" />
     <Compile Include="Infrastructure\ReactiveViewModel.cs" />

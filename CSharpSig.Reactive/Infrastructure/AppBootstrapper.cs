@@ -4,19 +4,20 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Reactive.Linq;
 using System.Reflection;
 using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using PoC.NuGetWpf;
+using NLog;
 using ReactiveUI;
 using Splat;
+using ILogger = Splat.ILogger;
+using LogLevel = Splat.LogLevel;
 
 namespace ImprovingU.Reactive.Infrastructure
 {
-    public class AppBootstrapper
+    public class AppBootstrapper : IEnableLogger
     {
         public AppBootstrapper(IMutableDependencyResolver dependencyResolver)
         {
@@ -31,17 +32,17 @@ namespace ImprovingU.Reactive.Infrastructure
             Thread.CurrentThread.Name = "UI";
 
             // Sets my logger to the console, which goes to the debug output.
-            Log.InitializeWith<ConsoleLog>();
-
+            Locator.CurrentMutable.Register(() => new ConsoleLogger {Level = LogLevel.Debug}, typeof(ILogger));
+            
             // Show a banner to easily pick out where new instances start
             // in the log file. Plus it just looks cool.
-            LogExtensions.Log(this).Info(@" _______       _______             ");
-            LogExtensions.Log(this).Info(@"(_______)     (_______)        _   ");
-            LogExtensions.Log(this).Info(@" _     _ _   _ _   ___ _____ _| |_ ");
-            LogExtensions.Log(this).Info(@"| |   | | | | | | (_  | ___ (_   _)");
-            LogExtensions.Log(this).Info(@"| |   | | |_| | |___) | ____| | |_ ");
-            LogExtensions.Log(this).Info(@"|_|   |_|____/ \_____/|_____)  \__)");
-            LogExtensions.Log(this).Info(@"");
+            this.Log().Info(@" _______       _______             ");
+            this.Log().Info(@"(_______)     (_______)        _   ");
+            this.Log().Info(@" _     _ _   _ _   ___ _____ _| |_ ");
+            this.Log().Info(@"| |   | | | | | | (_  | ___ (_   _)");
+            this.Log().Info(@"| |   | | |_| | |___) | ____| | |_ ");
+            this.Log().Info(@"|_|   |_|____/ \_____/|_____)  \__)");
+            this.Log().Info(@"");
 
             // Show some basic information about the assembly.
             var assemblyLocation = GetAssemblyDirectory();
@@ -50,16 +51,16 @@ namespace ImprovingU.Reactive.Infrastructure
             var productVersion = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion;
             var principal = WindowsIdentity.GetCurrent().IfNotNull(x => x.Name, "[Unknown]");
             var ipAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList.FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetwork);
-            var machineName = String.Format("{0} ({1})", Environment.MachineName, ipAddress);
-            var windowsVersion = String.Format("{0} {1}", Environment.OSVersion, Environment.Is64BitOperatingSystem ? "64bit" : "32bit");
+            var machineName = $"{Environment.MachineName} ({ipAddress})";
+            var windowsVersion = $"{Environment.OSVersion} {(Environment.Is64BitOperatingSystem ? "64bit" : "32bit")}";
 
-            LogExtensions.Log(this).Info("Assembly location: {0}", assemblyLocation);
-            LogExtensions.Log(this).Info(" Assembly version: {0}", assemblyVersion);
-            LogExtensions.Log(this).Info("     File version: {0}", fileVersion);
-            LogExtensions.Log(this).Info("  Product version: {0}", productVersion);
-            LogExtensions.Log(this).Info("       Running as: {0}", principal);
-            LogExtensions.Log(this).Info("     Network Host: {0}", machineName);
-            LogExtensions.Log(this).Info("  Windows Version: {0}", windowsVersion);
+            this.Log().Info($"Assembly location: {assemblyLocation}");
+            this.Log().Info($" Assembly version: {assemblyVersion}");
+            this.Log().Info($"     File version: {fileVersion}");
+            this.Log().Info($"  Product version: {productVersion}");
+            this.Log().Info($"       Running as: {principal}");
+            this.Log().Info($"     Network Host: {machineName}");
+            this.Log().Info($"  Windows Version: {windowsVersion}");
         }
 
         static string GetAssemblyDirectory()
@@ -81,21 +82,19 @@ namespace ImprovingU.Reactive.Infrastructure
 
             AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
             {
-                var loggerTarget = sender ?? this;
                 var exception = args.ExceptionObject as Exception;
-                LogExtensions.Log(loggerTarget).Fatal(exception, "Unhandled exception in the app domain.");
+                
+                LogHost.Default.FatalException("Unhandled exception in the app domain.", exception);
             };
 
             TaskScheduler.UnobservedTaskException += (sender, args) =>
             {
-                var loggerTarget = sender ?? this;
-                LogExtensions.Log(loggerTarget).Fatal(args.Exception, "Unhandled exception in the task scheduler.");
+                LogHost.Default.FatalException("Unhandled exception in the task scheduler.", args.Exception);
             };
 
             Application.Current.DispatcherUnhandledException += (sender, args) =>
             {
-                var loggerTarget = sender ?? this;
-                LogExtensions.Log(loggerTarget).Fatal(args.Exception, "Unhandled exception in the application dispatcher.");
+                LogHost.Default.FatalException("Unhandled exception in the application dispatcher.", args.Exception);
             };
         }
 
